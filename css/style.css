@@ -1,105 +1,155 @@
-:root {
-  --bg: #fbfbfa;
-  --surface: #ffffff;
-  --border: #eaeaea;
-  --text: #111111;
-  --muted: #787774;
-  --accent-bg: #e1f3fe;
-  --accent-text: #1f6c9f;
+@font-face {
+  font-family: "Satoshi";
+  src: url("../assets/fonts/Satoshi-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("../assets/fonts/Satoshi-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("../assets/fonts/Geist-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  src: url("../assets/fonts/ppneuemontreal-book.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html,
 body {
+  height: 100%;
   margin: 0;
+  background: #fbfbfa;
+  overflow: hidden;
+  overscroll-behavior: none;
   font-family: "Geist", "Helvetica Neue", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
 }
 
-.hero {
-  --radius: min(400px, 40vh);
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  margin: 0;
-  padding: 1.5rem;
+canvas {
+  display: block;
+}
+
+#ring-root {
+  position: fixed;
+  inset: 0;
+}
+
+.ring-container {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+.ring-list {
+  pointer-events: none;
+  position: fixed;
+  right: 12vw;
+  top: 2.4vh;
+  z-index: 10;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  color: #0a0a0a;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 }
 
-.hero-orbit {
+.ring-list li {
+  opacity: 0.2;
+}
+
+.meta-box {
+  pointer-events: none;
+  position: fixed;
+  top: 50%;
+  z-index: 10;
+  transform: translateY(-50%);
+  letter-spacing: -0.01em;
+  color: #0a0a0a;
+}
+
+.meta-goo {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  animation: orbit-spin 24s linear infinite;
+  will-change: filter;
 }
 
-@keyframes orbit-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.orbit-image {
+.meta-layer {
   position: absolute;
-  top: 50%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.meta-plain {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.ring-loader {
+  pointer-events: none;
+  position: fixed;
   left: 50%;
-  width: 200px;
-  height: 126px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transform: translate(-50%, -50%)
-    rotate(var(--angle))
-    translate(var(--radius))
-    rotate(90deg);
+  z-index: 10;
+  transform: translateX(-50%);
+  letter-spacing: -0.01em;
+  color: #0a0a0a;
 }
 
-.hero-content {
-  position: relative;
-  text-align: center;
-  max-width: 420px;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.hero-content h1 {
-  font-family: "Newsreader", serif;
-  font-weight: 500;
-  font-size: 3rem;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin: 0;
-}
-
-.hero-content p {
-  color: var(--muted);
-  margin-top: 0.75rem;
-  font-size: 1.05rem;
+.ring-goo-svg {
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 @media (max-width: 640px) {
-  .hero {
-    --radius: 140px;
+  .ring-list {
+    display: none;
   }
-  .orbit-image {
-    width: 80px;
-    height: 50px;
-  }
-}
-
-.site-footer {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-  border-top: 1px solid var(--border);
 }
