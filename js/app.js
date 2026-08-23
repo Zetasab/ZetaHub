@@ -13,32 +13,35 @@ function renderSite(data) {
   document.getElementById("site-name").textContent = data.site.name;
   document.getElementById("site-tagline").textContent = data.site.tagline;
 
-  const container = document.getElementById("items-container");
-  container.innerHTML = "";
-
-  data.items.forEach((item) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      <h2>${item.title}</h2>
-      <p>${item.description}</p>
-      <a href="${item.url}">Ver más &rarr;</a>
-    `;
-    container.appendChild(card);
-  });
-
-  animateCards();
+  renderOrbit(data.items);
 }
 
-function animateCards() {
-  if (typeof gsap === "undefined") return;
-  gsap.from(".card", {
-    y: 24,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.08,
-    ease: "power2.out",
+function renderOrbit(items) {
+  const orbit = document.getElementById("hero-orbit");
+  orbit.innerHTML = "";
+
+  const withImage = items.filter((item) => item.image);
+  const total = withImage.length;
+
+  withImage.forEach((item, index) => {
+    const angle = (360 / total) * index - 90;
+    const img = document.createElement("img");
+    img.className = "orbit-image";
+    img.src = item.image;
+    img.alt = item.title;
+    img.style.setProperty("--angle", `${angle}deg`);
+    orbit.appendChild(img);
   });
+
+  if (typeof gsap !== "undefined") {
+    gsap.from(".orbit-image", {
+      opacity: 0,
+      scale: 0.6,
+      duration: 0.7,
+      stagger: 0.1,
+      ease: "back.out(1.6)",
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadData);

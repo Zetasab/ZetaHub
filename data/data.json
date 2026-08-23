@@ -6,24 +6,38 @@
   "items": [
     {
       "id": 1,
-      "title": "Proyecto 1",
-      "description": "Descripción breve del proyecto 1",
+      "title": "Portfolio",
+      "description": "Sitio personal con mis proyectos y trayectoria",
       "url": "#",
-      "image": ""
+      "image": "assets/proyects/portfolio.png"
     },
     {
       "id": 2,
-      "title": "Proyecto 2",
-      "description": "Descripción breve del proyecto 2",
+      "title": "ZTemplates",
+      "description": "Colección de plantillas reutilizables para nuevos proyectos",
       "url": "#",
-      "image": ""
+      "image": "assets/proyects/ztemplates.png"
     },
     {
       "id": 3,
-      "title": "Proyecto 3",
-      "description": "Descripción breve del proyecto 3",
+      "title": "ZGaming",
+      "description": "Frontend en Node para el servicio de videojuegos",
       "url": "#",
-      "image": ""
+      "image": "assets/proyects/zgaming.png"
+    },
+    {
+      "id": 4,
+      "title": "Zocorn",
+      "description": "Aplicación Vue construida sobre el ecosistema Zocorn",
+      "url": "#",
+      "image": "assets/proyects/zocorn.png"
+    },
+    {
+      "id": 5,
+      "title": "CesarSob Dashboard",
+      "description": "Panel de control en Angular para gestionar mis servicios",
+      "url": "#",
+      "image": "assets/proyects/ngcesarsobrino.png"
     }
   ]
 }
