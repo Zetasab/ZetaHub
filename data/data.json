@@ -1,0 +1,29 @@
+{
+  "site": {
+    "name": "ZetaHub",
+    "tagline": "Tu portal central de proyectos"
+  },
+  "items": [
+    {
+      "id": 1,
+      "title": "Proyecto 1",
+      "description": "Descripción breve del proyecto 1",
+      "url": "#",
+      "image": ""
+    },
+    {
+      "id": 2,
+      "title": "Proyecto 2",
+      "description": "Descripción breve del proyecto 2",
+      "url": "#",
+      "image": ""
+    },
+    {
+      "id": 3,
+      "title": "Proyecto 3",
+      "description": "Descripción breve del proyecto 3",
+      "url": "#",
+      "image": ""
+    }
+  ]
+}
