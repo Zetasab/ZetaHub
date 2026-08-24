@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-  Por si quieres ver — <a href="https://zetahub.vercel.app"><strong>Live Demo</strong></a>
+  Por si quieres ver — <a href="https://zetahubvercel.vercel.app"><strong>Live Demo</strong></a>
 </p>
 
 <p align="center">

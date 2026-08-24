@@ -16,7 +16,7 @@ export const PROJECTS = [
     type: "Static website",
     stack: ["html", "css", "js", "threejs"],
     year: "2026",
-    url: "https://zetahub.vercel.app",
+    url: "https://zetahubvercel.vercel.app",
     githubUrl: "https://github.com/Zetasab/ZetaHub",
     description: "Portal WebGL con todos mis proyectos, renderizado en un único shader Three.js.",
   },
