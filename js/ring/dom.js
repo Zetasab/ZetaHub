@@ -57,6 +57,26 @@ export function buildOverlay(root) {
   root.appendChild(metaLeft.box);
   root.appendChild(metaRight.box);
 
+  const video = document.createElement("video");
+  video.className = "ring-video";
+  video.muted = true;
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = "none";
+  root.appendChild(video);
+
+  const videoTag = document.createElement("div");
+  videoTag.className = "video-tag";
+  videoTag.setAttribute("aria-hidden", "true");
+  const videoTagIcon = document.createElement("img");
+  videoTagIcon.src = "assets/arrow-top-right-svgrepo-com.svg";
+  videoTagIcon.alt = "";
+  const videoTagLabel = document.createElement("span");
+  videoTagLabel.textContent = "Ver";
+  videoTag.appendChild(videoTagIcon);
+  videoTag.appendChild(videoTagLabel);
+  root.appendChild(videoTag);
+
   const loader = document.createElement("div");
   loader.className = "ring-loader";
   loader.setAttribute("aria-hidden", "true");
@@ -96,6 +116,8 @@ export function buildOverlay(root) {
     container,
     list,
     items,
+    video,
+    videoTag,
     loader,
     live,
     cut,

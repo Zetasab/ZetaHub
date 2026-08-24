@@ -89,7 +89,7 @@ export function defaultParams() {
     // -- the intro heading, in the scene ---------------------------------
     text: "ZetaHub",
     textSize: 41,
-    textFont: "PP Neue Montreal",
+    textFont: "Satoshi",
     textWeight: 400,
     textTracking: 0,
     textColor: "#0a0a0a",

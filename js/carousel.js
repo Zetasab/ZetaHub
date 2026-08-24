@@ -42,6 +42,8 @@ export function initCarousel(root) {
   const loaderEl = overlay.loader;
   const liveEl = overlay.live;
   const cutEl = overlay.cut;
+  const videoEl = overlay.video;
+  const videoTagEl = overlay.videoTag;
   const metaGroups = overlay.groups;
 
   const params = defaultParams();
@@ -155,6 +157,16 @@ export function initCarousel(root) {
   uniforms.uAtlas.value = atlas.texture;
   uniforms.uGrid.value.set(atlas.grid[0], atlas.grid[1]);
   const imageCount = atlas.count;
+
+  // Art is dealt by ring slot, not plane index (see layout() below); this is
+  // the same mapping, kept here too so a click on the list can look up which
+  // plane currently wears a given project without duplicating the formula.
+  const cellOf = (slot) => {
+    const imgOff = Math.round(params.imageOffset);
+    return imageCount > 0
+      ? (((imgOff - slot) % imageCount) + imageCount) % imageCount
+      : 0;
+  };
 
   atlas.first.then(() => {
     firstIn = true;
@@ -282,6 +294,32 @@ export function initCarousel(root) {
     });
   };
 
+  // The list shows project index, not plane index (planes reshuffle in fan
+  // order — see layout() below). Resolve which plane currently wears cell j
+  // before handing off to pick().
+  const pickCell = (j) => {
+    const count = Math.round(params.count);
+    for (let i = 0; i < count; i++) {
+      if (cellOf(signedOffset(i)) === j) {
+        pick(i);
+        return;
+      }
+    }
+  };
+
+  itemEls.forEach((el, j) => {
+    el.classList.add("ring-list-link");
+    el.addEventListener("click", () => {
+      if (!interactive) return;
+      if (j === shown) {
+        const url = PROJECTS[j]?.url;
+        if (url && url !== "#") window.open(url, "_blank");
+        return;
+      }
+      pickCell(j);
+    });
+  });
+
   /* ------------------------------------------------------------ pointer */
   const pointer = { x: 0, y: 0, inside: false, seeded: false };
   const cursor = { x: 0, y: 0, amt: 0, wake: 0 };
@@ -305,8 +343,16 @@ export function initCarousel(root) {
 
   const engaged = () => (coarse ? held : pointer.inside);
 
+  // Raw viewport coords, kept alongside the world-space pointer above — the
+  // video tag is a plain fixed DOM element, so it wants clientX/clientY, not
+  // the shader's centre-origin, Y-up space.
+  let clientX = 0;
+  let clientY = 0;
+
   const trackPointer = (e) => {
     coarse = e.pointerType === "touch";
+    clientX = e.clientX;
+    clientY = e.clientY;
     pointer.x = e.clientX - bounds.left - viewW * 0.5;
     pointer.y = viewH * 0.5 - (e.clientY - bounds.top);
     pointer.inside = true;
@@ -392,7 +438,7 @@ export function initCarousel(root) {
 
   const onClick = () => {
     if (!interactive || pointerTravel >= 5 || over < 0) return;
-    if (over === shown) {
+    if (over === frontPlane) {
       const url = PROJECTS[shown]?.url;
       if (url && url !== "#") window.open(url, "_blank");
       return;
@@ -453,6 +499,70 @@ export function initCarousel(root) {
     }
   };
 
+  /* ------------------------------------------------------- hover video */
+  // The centred card's own back-side clip, played over the shader in a plain
+  // <video> rather than as a second atlas: decoding a handful of mp4s into
+  // the shared texture would stall every card whenever one is hovered.
+  const HOVER_DELAY = 1000; // ms the cursor has to sit still before the clip shows
+  let hoverSince = 0;
+  // Read by layout() to suppress the "Ver" cursor tag while the clip is up —
+  // both are drawn on top of the card, and the tag lives inside the ring's
+  // own shader pass, so it can't be layered under the <video> with CSS alone.
+  let videoVisible = false;
+
+  const updateVideo = () => {
+    const hoveringFront =
+      interactive && !dragging && over >= 0 && over === frontPlane;
+    const project = shown >= 0 ? PROJECTS[shown] : null;
+    const src = hoveringFront ? project?.video : null;
+
+    if (!src) {
+      hoverSince = 0;
+      videoVisible = false;
+      videoEl.classList.remove("visible");
+      videoTagEl.classList.remove("visible");
+      if (!videoEl.paused) videoEl.pause();
+      return;
+    }
+
+    if (!hoverSince) hoverSince = performance.now();
+    if (performance.now() - hoverSince < HOVER_DELAY) {
+      videoVisible = false;
+      videoEl.classList.remove("visible");
+      videoTagEl.classList.remove("visible");
+      return;
+    }
+
+    videoVisible = true;
+
+    if (videoEl.dataset.src !== src) {
+      videoEl.dataset.src = src;
+      videoEl.src = src;
+      videoEl.play().catch(() => {});
+    } else if (videoEl.paused) {
+      videoEl.play().catch(() => {});
+    }
+
+    const pos = uniforms.uPos.value[frontPlane];
+    const scale = uniforms.uScale.value[frontPlane];
+    const size = uniforms.uSize.value;
+    const w = size.x * scale.x;
+    const h = size.y * scale.y;
+    const cssX = bounds.left + viewW * 0.5 + pos.x - w * 0.5;
+    const cssY = bounds.top + viewH * 0.5 - pos.y - h * 0.5;
+
+    videoEl.style.width = `${w}px`;
+    videoEl.style.height = `${h}px`;
+    videoEl.style.borderRadius = `${uniforms.uRadius.value}px`;
+    videoEl.style.transform = `translate(${cssX}px, ${cssY}px)`;
+    videoEl.classList.add("visible");
+
+    // Same offset off the cursor as the shader's own tag (params.tagX/tagY),
+    // just in plain screen px since this one is a DOM element.
+    videoTagEl.style.transform = `translate(${clientX + params.tagX}px, ${clientY - params.tagY}px)`;
+    videoTagEl.classList.add("visible");
+  };
+
   /* ------------------------------------------------------- the carousel */
   const travel = new Float32Array(MAX_PLANES);
   const cum = new Float32Array(MAX_PLANES);
@@ -476,6 +586,7 @@ export function initCarousel(root) {
   let announced = -1;
   let over = -1;
   let tagUp = false;
+  let frontPlane = -1;
 
   const paintList = () => {
     for (let i = 0; i < itemEls.length; i++) {
@@ -551,12 +662,6 @@ export function initCarousel(root) {
     let frontI = -1;
     let frontD = 1e9;
     let frontCell = 0;
-
-    const imgOff = Math.round(params.imageOffset);
-    const cellOf = (slot) =>
-      imageCount > 0
-        ? (((imgOff - slot) % imageCount) + imageCount) % imageCount
-        : 0;
 
     const probe = pointer.inside && pointer.seeded && interactive;
     let overI = -1;
@@ -670,7 +775,8 @@ export function initCarousel(root) {
     }
 
     over = overI;
-    const wantTag = over >= 0 && !coarse && viewW > params.tagFrom;
+    const wantTag =
+      over >= 0 && !coarse && viewW > params.tagFrom && !videoVisible;
     if (wantTag !== tagUp) {
       tagUp = wantTag;
       tag.show(wantTag);
@@ -691,6 +797,7 @@ export function initCarousel(root) {
     );
     uniforms.uTagQ.value.set(params.tagFrost, params.tagRim, 0, 0);
 
+    frontPlane = frontI;
     if (frontI >= 0 && imageCount > 0 && frontCell !== shown) {
       shown = frontCell;
       paintList();
@@ -960,6 +1067,7 @@ export function initCarousel(root) {
     tickLoader(dt);
     updatePointer(dt);
     layout(dt);
+    updateVideo();
 
     if (
       interactive &&

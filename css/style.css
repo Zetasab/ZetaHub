@@ -22,14 +22,6 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "PP Neue Montreal";
-  src: url("../assets/fonts/ppneuemontreal-book.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -83,6 +75,41 @@ canvas {
   opacity: 0.2;
 }
 
+.ring-list-link {
+  position: relative;
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    letter-spacing 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-list-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ring-list-link:hover {
+  opacity: 0.6 !important;
+  letter-spacing: 0.04em;
+}
+
+.ring-list-link[aria-current="true"]:hover {
+  opacity: 1 !important;
+}
+
+.ring-list-link:hover::after {
+  transform: scaleX(1);
+}
+
 .meta-box {
   pointer-events: none;
   position: fixed;
@@ -91,6 +118,63 @@ canvas {
   transform: translateY(-50%);
   letter-spacing: -0.01em;
   color: #0a0a0a;
+}
+
+.ring-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.ring-video.visible {
+  opacity: 1;
+}
+
+.video-tag {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.85rem;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -6px 10px -6px rgba(255, 255, 255, 0.3),
+    0 6px 20px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(0, 0) scale(0.7);
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.video-tag.visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+
+.video-tag img {
+  width: 14px;
+  height: 14px;
+  filter: invert(1);
 }
 
 .meta-goo {
