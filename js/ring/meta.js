@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { PROJECTS } from "./projects.js";
+import { TECH_ICONS } from "./techIcons.js";
 
 const SIDES = ["left", "right"];
 const SLOTS = 2;
@@ -91,10 +92,81 @@ function createGroup(side, groups, params) {
   return { m, set };
 }
 
+// Same crossfade as createGroup, just one word instead of a lead/trail pair —
+// the description sits outside the name/type rows entirely (see dom.js), so
+// it gets its own small morph rather than a third slot bolted onto theirs.
+function createDescGroup(groups, params) {
+  const m = { t: 1 };
+  let prev = "";
+  let moving = false;
+
+  const draw = () => {
+    const g = groups.right;
+    if (!g?.descLayers) return;
+    const out = g.descLayers[0]?.firstElementChild;
+    const into = g.descLayers[1]?.firstElementChild;
+    const held = g.descPlain?.firstElementChild;
+    const t = m.t;
+
+    if (moving) {
+      fade(out, 1 - t, params.nameBlur);
+      fade(into, t, params.nameBlur);
+      if (held) held.style.opacity = "0";
+    } else {
+      if (out) out.style.opacity = "0";
+      if (into) into.style.opacity = "0";
+      if (held) held.style.opacity = "1";
+    }
+
+    if (g.descGoo) {
+      g.descGoo.style.filter =
+        t >= 1 ? "none" : `url(#name-goo) blur(${params.nameSoften}px)`;
+    }
+  };
+
+  const set = (text) => {
+    const g = groups.right;
+    if (!g?.descLayers?.[0] || !g.descLayers?.[1] || !g.descPlain) return;
+    gsap.killTweensOf(m);
+
+    m.t = 1;
+    draw();
+
+    const next = text ?? "";
+    moving = next !== prev;
+
+    const out = g.descLayers[0].firstElementChild;
+    const into = g.descLayers[1].firstElementChild;
+    const held = g.descPlain.firstElementChild;
+    if (out) out.textContent = prev;
+    if (into) into.textContent = next;
+    if (held) held.textContent = next;
+    prev = next;
+
+    if (!moving) {
+      m.t = 1;
+      draw();
+      return;
+    }
+
+    m.t = 0;
+    draw();
+    gsap.to(m, {
+      t: 1,
+      duration: params.nameMorphTime,
+      ease: params.nameEase,
+      onUpdate: draw,
+    });
+  };
+
+  return { m, set };
+}
+
 export function createMeta(refs, params) {
   const { groups, list, loader, cut, live } = refs;
   const left = createGroup("left", groups, params);
   const right = createGroup("right", groups, params);
+  const desc = createDescGroup(groups, params);
 
   const setThreshold = () => {
     cut?.setAttribute(
@@ -179,13 +251,72 @@ export function createMeta(refs, params) {
     const p = PROJECTS[i];
     if (!p) return;
     left.set([String(i + 1).padStart(2, "0"), p.name]);
-    right.set([p.type, p.year]);
+    right.set([p.type, ""]);
+    if (groups.left?.icon && p.icon) {
+      const icon = groups.left.icon;
+      icon.src = p.icon;
+      gsap.killTweensOf(icon);
+      gsap.fromTo(
+        icon,
+        { opacity: 0, filter: `blur(${params.nameBlur}px)` },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: params.nameMorphTime,
+          ease: params.nameEase,
+        },
+      );
+    }
+    if (groups.right?.github) {
+      const hasRepo = p.githubUrl && p.githubUrl !== "#";
+      groups.right.github.href = hasRepo ? p.githubUrl : "";
+      groups.right.github.classList.toggle("visible", hasRepo);
+    }
+    if (groups.right?.stackRow) {
+      const row = groups.right.stackRow;
+      row.innerHTML = "";
+      for (const key of p.stack ?? []) {
+        const entry = TECH_ICONS[key];
+        if (!entry) continue;
+        const svg = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg",
+        );
+        svg.setAttribute("viewBox", "0 0 24 24");
+        svg.setAttribute("fill", entry.color);
+        svg.setAttribute("aria-hidden", "true");
+        svg.innerHTML = entry.svg;
+        const label = document.createElement("span");
+        label.className = "meta-stack-label";
+        label.textContent = entry.label;
+        const wrap = document.createElement("span");
+        wrap.className = "meta-stack-icon";
+        wrap.appendChild(svg);
+        wrap.appendChild(label);
+        row.appendChild(wrap);
+      }
+      gsap.killTweensOf(row);
+      gsap.fromTo(
+        row,
+        { opacity: 0, filter: `blur(${params.nameBlur}px)` },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: params.nameMorphTime,
+          ease: params.nameEase,
+        },
+      );
+    }
+    desc.set(p.description);
     if (live) live.textContent = `${p.name}. ${p.type}, ${p.year}.`;
   };
 
   const dispose = () => {
     gsap.killTweensOf(left.m);
     gsap.killTweensOf(right.m);
+    gsap.killTweensOf(desc.m);
+    if (groups.left?.icon) gsap.killTweensOf(groups.left.icon);
+    if (groups.right?.stackRow) gsap.killTweensOf(groups.right.stackRow);
   };
 
   return { show, style, setThreshold, dispose };

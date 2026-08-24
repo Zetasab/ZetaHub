@@ -34,6 +34,47 @@ const blankTexture = () => {
   return t;
 };
 
+// A small taste of what the ring itself does with the cursor: the button
+// leans toward it (magnetic pull, capped so it can't stray far from its
+// resting spot) and a soft highlight tracks it underneath, standing in for
+// the shader's liquid surface on a plain DOM element.
+const GITHUB_PULL = 0.35;
+const GITHUB_PULL_MAX = 8; // px
+
+function initGithubHover(button) {
+  if (!button) return;
+
+  const onMove = (e) => {
+    const rect = button.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const dx = Math.max(
+      -GITHUB_PULL_MAX,
+      Math.min(GITHUB_PULL_MAX, (e.clientX - cx) * GITHUB_PULL),
+    );
+    const dy = Math.max(
+      -GITHUB_PULL_MAX,
+      Math.min(GITHUB_PULL_MAX, (e.clientY - cy) * GITHUB_PULL),
+    );
+    button.style.setProperty("--mx", `${dx}px`);
+    button.style.setProperty("--my", `${dy}px`);
+
+    const gx = ((e.clientX - rect.left) / rect.width) * 100;
+    const gy = ((e.clientY - rect.top) / rect.height) * 100;
+    button.style.setProperty("--gx", `${gx}%`);
+    button.style.setProperty("--gy", `${gy}%`);
+  };
+
+  const onLeave = () => {
+    button.style.setProperty("--mx", "0px");
+    button.style.setProperty("--my", "0px");
+  };
+
+  button.addEventListener("pointermove", onMove);
+  button.addEventListener("pointerleave", onLeave);
+}
+
 export function initCarousel(root) {
   const overlay = buildOverlay(root);
   const container = overlay.container;
@@ -45,6 +86,8 @@ export function initCarousel(root) {
   const videoEl = overlay.video;
   const videoTagEl = overlay.videoTag;
   const metaGroups = overlay.groups;
+
+  initGithubHover(metaGroups.right.github);
 
   const params = defaultParams();
   const state = { progress: 0, launch: 0, spread: 0, spin: 0, shift: 0 };
@@ -542,6 +585,7 @@ export function initCarousel(root) {
     } else if (videoEl.paused) {
       videoEl.play().catch(() => {});
     }
+    videoEl.classList.toggle("bordered", src.endsWith("zetahub.mp4"));
 
     const pos = uniforms.uPos.value[frontPlane];
     const scale = uniforms.uScale.value[frontPlane];

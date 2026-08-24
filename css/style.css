@@ -115,9 +115,178 @@ canvas {
   position: fixed;
   top: 50%;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.9vw;
   transform: translateY(-50%);
   letter-spacing: -0.01em;
   color: #0a0a0a;
+}
+
+.meta-box[data-side="right"] {
+  justify-content: flex-end;
+}
+
+.meta-icon {
+  width: 2.4vw;
+  height: 2.4vw;
+  min-width: 28px;
+  min-height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 0;
+  background: transparent;
+  flex-shrink: 0;
+  opacity: 0;
+  filter: blur(8px);
+}
+
+.meta-github {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.8vw;
+  height: 2.8vw;
+  min-width: 36px;
+  min-height: 36px;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -4px 8px -4px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  --mx: 0px;
+  --my: 0px;
+  --gscale: 0.7;
+  --gx: 50%;
+  --gy: 50%;
+  transform: translate(var(--mx), var(--my)) scale(var(--gscale));
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease;
+}
+
+.meta-github.visible {
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 1;
+  --gscale: 1;
+}
+
+.meta-github::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--gx) var(--gy),
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 255, 255, 0) 65%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.meta-github:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.meta-github:hover::before {
+  opacity: 1;
+}
+
+.meta-github svg {
+  width: 55%;
+  height: 55%;
+}
+
+.meta-textstack {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+}
+
+.meta-stack {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.9em;
+  transform: translateY(4em);
+  pointer-events: none;
+}
+
+.meta-stack-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.meta-stack-icon svg {
+  width: 1em;
+  height: 1em;
+  font-size: clamp(13px, 1.1vw, 17px);
+  flex-shrink: 0;
+}
+
+.meta-stack-label {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(11px, 0.95vw, 14px);
+  font-weight: 400;
+  color: rgba(10, 10, 10, 0.65);
+  white-space: nowrap;
+}
+
+.meta-desc {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 22vw;
+  min-width: 200px;
+  height: 1.6em;
+  padding-left: 1.4em;
+  transform: translateY(6.8em);
+  pointer-events: none;
+}
+
+.meta-desc-goo {
+  position: absolute;
+  inset: 0;
+  will-change: filter;
+}
+
+.meta-desc-layer,
+.meta-desc-plain {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.meta-desc-layer span,
+.meta-desc-plain span {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(12px, 1.05vw, 16px);
+  font-weight: 400;
+  color: rgba(10, 10, 10, 0.55);
+  /* white-space: nowrap; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .ring-video {
@@ -133,6 +302,11 @@ canvas {
 
 .ring-video.visible {
   opacity: 1;
+}
+
+.ring-video.bordered {
+  border: 1px solid #0a0a0a;
+  box-sizing: border-box;
 }
 
 .video-tag {
