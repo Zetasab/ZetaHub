@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { IMAGE_FILES } from "./projects.js";
 
-const CELL_W = 512;
+const CELL_W = 1024;
 const CELL_H = Math.round(CELL_W / 1.5);
 
 const load = (src, priority) =>

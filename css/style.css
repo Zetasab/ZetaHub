@@ -146,10 +146,10 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.8vw;
-  height: 2.8vw;
-  min-width: 36px;
-  min-height: 36px;
+  width: 2.3vw;
+  height: 2.3vw;
+  min-width: 30px;
+  min-height: 30px;
   flex-shrink: 0;
   overflow: hidden;
   color: #0a0a0a;
@@ -169,7 +169,7 @@ canvas {
   --gscale: 0.7;
   --gx: 50%;
   --gy: 50%;
-  transform: translate(var(--mx), var(--my)) scale(var(--gscale));
+  transform: translate(var(--mx), calc(var(--my) - 6px)) scale(var(--gscale));
   transition:
     opacity 0.3s ease,
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -206,8 +206,8 @@ canvas {
 }
 
 .meta-github svg {
-  width: 55%;
-  height: 55%;
+  width: 70%;
+  height: 70%;
 }
 
 .meta-textstack {
