@@ -81,7 +81,7 @@ export function defaultParams() {
     maxSpeed: 12,
     dragSpeed: 1,
     snap: true,
-    snapTime: 0.8,
+    snapTime: 0.4,
     snapFrom: 1,
     pickTime: 0.55,
     pickEase: "power3.inOut",
