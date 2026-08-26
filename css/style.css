@@ -406,8 +406,234 @@ canvas {
   height: 0;
 }
 
+.info-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+}
+
+.info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    inset 0 -4px 8px -4px rgba(0, 0, 0, 0.08),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease;
+}
+
+.info-btn:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.info-btn:active {
+  transform: scale(0.94);
+}
+
+.info-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 210px;
+  padding: 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    0 10px 30px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition:
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s;
+}
+
+.info-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.info-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #0a0a0a;
+  text-decoration: none;
+  text-align: left;
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.info-menu-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.info-menu-item svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.privacy-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 20px;
+  background: rgba(10, 10, 10, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.privacy-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.privacy-dialog {
+  position: relative;
+  width: min(720px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: rgba(251, 251, 250, 0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    0 24px 60px rgba(0, 0, 0, 0.25);
+  padding: 48px 44px;
+  transform: translateY(16px) scale(0.97);
+  opacity: 0;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease;
+}
+
+.privacy-overlay.open .privacy-dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.privacy-close {
+  position: sticky;
+  float: right;
+  top: 0;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: #0a0a0a;
+  background: rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.privacy-close:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.privacy-content h2 {
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+  color: #0a0a0a;
+}
+
+.privacy-updated {
+  opacity: 0.55;
+  font-size: 0.82rem;
+  margin-bottom: 32px;
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  color: #0a0a0a;
+}
+
+.privacy-content h3 {
+  font-family: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 28px 0 10px;
+  color: #0a0a0a;
+}
+
+.privacy-content p {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(10, 10, 10, 0.8);
+  margin: 0 0 4px;
+}
+
+.privacy-content a {
+  color: #0a0a0a;
+}
+
+.privacy-content strong {
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .ring-list {
     display: none;
+  }
+
+  .info-widget {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .privacy-dialog {
+    padding: 32px 22px;
+    border-radius: 16px;
   }
 }

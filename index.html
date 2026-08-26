@@ -2,9 +2,40 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>ZetaHub - Todos mis proyectos en un solo lugar</title>
+  <meta name="description" content="ZetaHub: todos mis proyectos en un solo lugar, en un anillo 3D interactivo renderizado con WebGL." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ZetaHub" />
+  <meta property="og:title" content="ZetaHub - Todos mis proyectos en un solo lugar" />
+  <meta property="og:description" content="Todos mis proyectos en un solo lugar, en un anillo 3D interactivo renderizado con WebGL." />
+  <meta property="og:url" content="https://zetahubvercel.vercel.app" />
+  <meta property="og:image" content="https://zetahubvercel.vercel.app/assets/icon.jpg" />
+  <meta property="og:image:width" content="347" />
+  <meta property="og:image:height" content="357" />
+  <meta property="og:locale" content="es_ES" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ZetaHub - Todos mis proyectos en un solo lugar" />
+  <meta name="twitter:description" content="Todos mis proyectos en un solo lugar, en un anillo 3D interactivo renderizado con WebGL." />
+  <meta name="twitter:image" content="https://zetahubvercel.vercel.app/assets/icon.jpg" />
+
+  <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/icon.jpg" />
+
+  <!-- iOS: icono y modo "app" al añadir a pantalla de inicio -->
+  <link rel="apple-touch-icon" href="assets/icon.jpg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ZetaHub" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#fbfbfa" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     {
@@ -17,6 +48,161 @@
 </head>
 <body>
   <div id="ring-root"></div>
+
+  <div class="info-widget">
+    <div class="info-menu" id="infoMenu">
+      <a class="info-menu-item" href="https://www.linkedin.com/in/cesar-sobrino-arribas-1b887021b/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+        <span>Ver LinkedIn</span>
+      </a>
+      <a class="info-menu-item" href="https://github.com/Zetasab" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.27-.01-1.15-.02-2.09-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a10.98 10.98 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z"/></svg>
+        <span>Ver GitHub</span>
+      </a>
+      <button type="button" class="info-menu-item" id="privacyOpenBtn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/></svg>
+        <span>Política de privacidad</span>
+      </button>
+    </div>
+    <button class="info-btn" id="infoBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Más información">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="9.5"/>
+        <line x1="12" y1="11" x2="12" y2="16.5"/>
+        <circle cx="12" cy="7.75" r="0.9" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="privacy-overlay" id="privacyOverlay">
+    <div class="privacy-dialog" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+      <button type="button" class="privacy-close" id="privacyCloseBtn" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19"/>
+          <line x1="19" y1="5" x2="5" y2="19"/>
+        </svg>
+      </button>
+
+      <div class="privacy-content">
+        <h2 id="privacyTitle">Política de privacidad</h2>
+        <div class="privacy-updated">Última actualización: 26 de agosto de 2026</div>
+
+        <p>
+          ZetaHub es un proyecto personal de <strong>Cesar Sobrino</strong>, sin ningún fin
+          comercial. Es un espacio de escaparate para desarrolladores donde mostrar proyectos
+          propios, a modo de portfolio interactivo. No se vende ningún producto ni servicio a
+          través de esta web.
+        </p>
+
+        <h3>Uso no comercial y sin garantías</h3>
+        <p>
+          Esta web se ofrece "tal cual", con fines personales y de demostración. No se ofrece
+          ninguna garantía de disponibilidad, funcionamiento continuo o ausencia de errores. El
+          autor no se hace responsable de posibles pérdidas de datos, fallos técnicos,
+          interrupciones del servicio o cualquier daño directo o indirecto derivado del uso de
+          esta web.
+        </p>
+
+        <h3>Datos que se recogen</h3>
+        <p>
+          Esta web puede recopilar información de visita con fines <strong>puramente
+          estadísticos</strong> (por ejemplo: páginas visitadas, navegador, dispositivo, país
+          aproximado o tiempo de permanencia), habitualmente a través de servicios de analítica
+          del proveedor de hosting (como Vercel Analytics) o herramientas similares. No se recogen
+          datos personales identificativos de forma directa, ni se solicitan formularios,
+          registros ni credenciales.
+        </p>
+
+        <h3>No se comparten ni venden datos</h3>
+        <p>
+          Los datos estadísticos recogidos <strong>no se venden, ceden ni comparten con
+          terceros</strong> con fines comerciales. Se usan exclusivamente para entender de forma
+          agregada y anónima cómo se utiliza la web, y así poder mejorarla.
+        </p>
+
+        <h3>Enlaces externos</h3>
+        <p>
+          Esta web enlaza a perfiles externos (LinkedIn, GitHub) y a proyectos de terceros.
+          ZetaHub no controla ni se responsabiliza de las políticas de privacidad ni del
+          contenido de esos sitios externos una vez el usuario abandona esta página.
+        </p>
+
+        <h3>Cambios en esta política</h3>
+        <p>
+          Esta política puede actualizarse en cualquier momento para reflejar cambios en la web o
+          en la normativa aplicable. Se recomienda revisar esta página periódicamente.
+        </p>
+
+        <h3>Contacto</h3>
+        <p>
+          Para cualquier duda sobre esta política, puedes contactar a través del
+          <a href="https://github.com/Zetasab" target="_blank" rel="noopener noreferrer">GitHub</a>
+          o
+          <a href="https://www.linkedin.com/in/cesar-sobrino-arribas-1b887021b/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          del autor.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById("infoBtn");
+      var menu = document.getElementById("infoMenu");
+      if (!btn || !menu) return;
+
+      function closeMenu() {
+        menu.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+      }
+
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var willOpen = !menu.classList.contains("open");
+        menu.classList.toggle("open", willOpen);
+        btn.setAttribute("aria-expanded", String(willOpen));
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!menu.contains(e.target) && e.target !== btn) closeMenu();
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeMenu();
+      });
+
+      var privacyBtn = document.getElementById("privacyOpenBtn");
+      var privacyOverlay = document.getElementById("privacyOverlay");
+      var privacyCloseBtn = document.getElementById("privacyCloseBtn");
+
+      function openPrivacy() {
+        closeMenu();
+        privacyOverlay.classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closePrivacy() {
+        privacyOverlay.classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      if (privacyBtn && privacyOverlay && privacyCloseBtn) {
+        privacyBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          openPrivacy();
+        });
+
+        privacyCloseBtn.addEventListener("click", closePrivacy);
+
+        privacyOverlay.addEventListener("click", function (e) {
+          if (e.target === privacyOverlay) closePrivacy();
+        });
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closePrivacy();
+        });
+      }
+    })();
+  </script>
 
   <script type="module" src="js/app.js"></script>
 </body>

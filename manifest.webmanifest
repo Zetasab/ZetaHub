@@ -1,0 +1,15 @@
+{
+  "name": "ZetaHub - Todos mis proyectos en un solo lugar",
+  "short_name": "ZetaHub",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfa",
+  "theme_color": "#fbfbfa",
+  "icons": [
+    {
+      "src": "assets/icon.jpg",
+      "sizes": "347x357",
+      "type": "image/jpeg"
+    }
+  ]
+}
