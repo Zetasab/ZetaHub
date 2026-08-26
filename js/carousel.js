@@ -819,6 +819,7 @@ export function initCarousel(root) {
     }
 
     over = overI;
+    renderer.domElement.style.cursor = over >= 0 ? "pointer" : "";
     const wantTag =
       over >= 0 && !coarse && viewW > params.tagFrom && !videoVisible;
     if (wantTag !== tagUp) {
